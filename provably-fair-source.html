@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crashly Provably Fair Source</title>
+  <link rel="stylesheet" href="/style.css?v=56.1">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top right, rgba(243, 186, 47, 0.12), transparent 34%),
+        radial-gradient(circle at top left, rgba(0, 136, 204, 0.14), transparent 36%),
+        #070a14;
+      color: #fff;
+      font-family: inherit;
+    }
+    .pf-wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 28px 18px 56px;
+    }
+    .pf-card {
+      background: rgba(11, 16, 30, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+    .pf-hero {
+      margin-bottom: 18px;
+      overflow: hidden;
+      position: relative;
+    }
+    .pf-hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -12% -45% auto;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(243, 186, 47, 0.18), transparent 62%);
+      pointer-events: none;
+    }
+    .pf-kicker {
+      color: #f3ba2f;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .pf-title {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 6vw, 44px);
+      line-height: 0.96;
+      font-weight: 900;
+    }
+    .pf-subtitle {
+      margin: 0;
+      max-width: 720px;
+      color: rgba(255, 255, 255, 0.72);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+    .pf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .pf-list {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.6;
+    }
+    .pf-list li + li {
+      margin-top: 6px;
+    }
+    .pf-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .pf-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+    }
+    .pf-btn-primary {
+      background: linear-gradient(135deg, #f3ba2f, #ffd967);
+      color: #111;
+    }
+    .pf-btn-secondary {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .pf-code {
+      margin-top: 18px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.38);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.86);
+    }
+    @media (max-width: 640px) {
+      .pf-wrap {
+        padding: 18px 14px 36px;
+      }
+      .pf-card {
+        padding: 18px;
+        border-radius: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="pf-wrap">
+    <section class="pf-card pf-hero">
+      <div class="pf-kicker">Provably Fair</div>
+      <h1 class="pf-title">Открытый код проверки</h1>
+      <p class="pf-subtitle">
+        Это безопасный публичный набор для ручной проверки уже завершённых игр.
+        Тут только deterministic verifier: хеширование, HMAC, расчёт crash, upgrade и dice по уже раскрытым
+        `serverSeed / clientSeed / nonce`.
+      </p>
+      <div class="pf-actions">
+        <a class="pf-btn pf-btn-primary" href="/provably-fair-verifier.js" target="_blank" rel="noopener noreferrer">
+          ОТКРЫТЬ JS-VERIFIER
+        </a>
+        <a class="pf-btn pf-btn-secondary" href="/provably-fair-verifier.js" download>
+          СКАЧАТЬ ФАЙЛ
+        </a>
+      </div>
+    </section>
+
+    <section class="pf-grid">
+      <article class="pf-card">
+        <h2 style="margin:0;">Что можно публиковать</h2>
+        <ul class="pf-list">
+          <li>Функции расчёта для уже завершённых раундов.</li>
+          <li>Проверку `serverSeedHash` против раскрытого `serverSeed`.</li>
+          <li>Формулы `dice`, `crash`, `upgrade` и RTP-adjust для проверки результата.</li>
+          <li>Примеры вызова verifier для ручной валидации истории игры.</li>
+        </ul>
+      </article>
+
+      <article class="pf-card">
+        <h2 style="margin:0;">Что нельзя публиковать</h2>
+        <ul class="pf-list">
+          <li>Текущие живые `serverSeed` для будущих раундов.</li>
+          <li>`.env`, токены бота, ключи облака, ключи шифрования, дампы БД.</li>
+          <li>Серверный код, который оперирует текущим состоянием игр в реальном времени.</li>
+          <li>Любые приватные сиды до их ротации и раскрытия.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="pf-card" style="margin-top:18px;">
+      <h2 style="margin:0 0 10px;">Почему это безопасно</h2>
+      <p style="margin:0; color:rgba(255,255,255,0.78); line-height:1.65;">
+        Публичный verifier не даёт угадать будущие результаты, потому что он не содержит текущие активные сиды.
+        Он только повторяет уже известный расчёт для конкретной завершённой игры после раскрытия нужных параметров.
+        Пользователь получает возможность проверить честность, но не возможность влиять на будущий раунд.
+      </p>
+      <div class="pf-code">import verifier from './provably-fair-verifier.js';
+
+const result = await verifier.verifyCrash({
+  serverSeed: 'revealed-server-seed',
+  clientSeed: 'client-seed-from-history',
+  nonce: 42,
+  rtpPercent: 100
+});
+
+console.log(result.crashPoint, result.serverSeedHash);</div>
+    </section>
+  </main>
+</body>
+</html>
